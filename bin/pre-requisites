@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -eo pipefail
+
+sudo apt-get update && \
+	sudo apt-get autoclean && \
+	sudo apt-get upgrade -y && \
+	sudo apt-get autoremove -y
+
+check_base_dependencies() {
+	for pkg in \
+		# zram
+		zram-config \
+		# Media
+		mint-meta-codecs \
+		vlc \
+		audacious \
+		gimp \
+		inkscape \
+		# Dev
+		gcc g++ make \
+		dia \
+		# curl
+		curl \
+		# python3
+		pip3 \
+		# terminal
+		terminator \
+		zsh \
+		git \
+		git-flow \
+		tree \
+		# browser
+		zeal \
+	; do
+		echo "\n\nInstalling $pkg!\n"
+		sudo apt-get install -y $pkg
+	done
+}
+
+main() {
+	check_base_dependencies
+
+	echo "\n\nInstalling docker!\n"
+	curl -fsSL https://get.docker.com | sudo sh \
+		&& sudo usermod -aG docker $USER \
+		&& pip3 install --user docker-compose
+}
