@@ -1,35 +1,32 @@
 #!/bin/bash
 
-# postgres
+# alpine
+docker pull alpine
 
+# debian
+docker pull debian:stretch-slim
+
+# postgres
 docker pull postgres:alpine
 
 # mysql
-
 docker pull mysql:5.7
 
 # nginx
-
 docker pull nginx:1.15-alpine
 
 # apache
-
 docker pull httpd:2.4-alpine
 
 # php
-
 docker pull php:7.3-alpine
-docker pull php:7.2-alpine
-docker pull php:7.1-alpine
 
 # redis
-
 docker pull redis:5-alpine
-docker pull redis:4-alpine
-
-# memcached
-docker pull memcached:1.15-alpine
 
 # rabbitmq
-
 docker pull rabbitmq:3.7-alpine
+docker pull rabbitmq:3.7-management-alpine
+
+# jenkins
+docker pull jenkins/jenkins:lts-alpine
