@@ -97,9 +97,15 @@ source ./global-req-php
 
 # node
 sudo curl -sL https://rpm.nodesource.com/setup_12.x | bash -
-./npminstalls
+./npminstalls.sh
 
 # tools
+
+# zeal
+sudo dnf install -y zeal
+
+# terminator
+sudo dnf install -y terminator
 
 # vim
 sudo dnf install -y neovim
@@ -123,6 +129,8 @@ sudo dnf install -y httpie
 
 # htop
 sudo dnf install -y htop
+
+# iotop
 sudo dnf install -y iotop
 
 # ntp
@@ -154,6 +162,8 @@ sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.m
 dnf check-update
 sudo dnf install -y code
 
+# infra
+
 # docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
@@ -166,13 +176,17 @@ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 docker-compose --version
 source ./pulldockerimages
 
-# config ntp
-sudo timedatectl set-ntp true
+# system
 
 # zram
 sudo dnf install -y zram
 sudo zramstart
 sudo systemctl enable zram-swap.service
+
+# config ntp
+sudo timedatectl set-ntp true
+
+# zsh
 
 # oh-my-zsh
 chsh -s /usr/bin/zsh
