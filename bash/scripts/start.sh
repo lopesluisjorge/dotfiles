@@ -1,12 +1,10 @@
 #!/bin/bash
 
-export PGSQL_CONTAINER_NAME=postgresql12global
-export PGSQL_VOLUME_NAME=postgresql12globalvolume
-export REDIS_CONTAINER_NAME=redis5global
-export MYSQL_CONTAINER_NAME=mysql57global
-export MYSQL_VOLUME_NAME=mysql57globalvolume
-export COMPOSER_HOME="$HOME/.config/composer"
-export COMPOSER_CACHE_DIR="$HOME/.cache/composer"
+export PGSQL_CONTAINER_NAME=pgsql_12_global
+export PGSQL_VOLUME_NAME=pgsql_12_global_volume
+export REDIS_CONTAINER_NAME=redis_5_global
+export MYSQL_CONTAINER_NAME=mysql_57_global
+export MYSQL_VOLUME_NAME=mysql_57_global_volume
 
 startdocker() {
 	if [ `ps aux | grep "docker" | wc -l` -eq 1 ]; then
@@ -26,9 +24,10 @@ cwn() {
 }
 
 psql() {
-	if [ `acwn $PGSQL_CONTAINER_NAME` -eq 0 ]; then
+	if [ `cwn $PGSQL_CONTAINER_NAME` -eq 0 ]; then
 		docker run \
 			--detach \
+			--rm \
 			--name $PGSQL_CONTAINER_NAME \
 			--volume $PWD:/app \
 			--volume $PGSQL_VOLUME_NAME:/var/lib/postgresql/data \
@@ -36,10 +35,6 @@ psql() {
 			--env POSTGRES_USER=postgres \
 			--env POSTGRES_PASSWORD=postgres \
 			postgres:12-alpine
-	fi
-
-	if [ `cwn $PGSQL_CONTAINER_NAME` -eq 0 ]; then
-		docker start $PGSQL_CONTAINER_NAME
 	fi
 
 	docker exec \
@@ -69,19 +64,16 @@ redis-cli() {
 }
 
 mysql() {
-	if [ `acwn $MYSQL_CONTAINER_NAME` -eq 0 ]; then
+	if [ `cwn $MYSQL_CONTAINER_NAME` -eq 0 ]; then
 		docker run \
 			--detach \
+			--rm \
 			--name $MYSQL_CONTAINER_NAME \
 			--volume $PWD:/app \
 			--volume $MYSQL_VOLUME_NAME:/var/lib/mysql \
 			--publish 3306:3306 \
 			--env MYSQL_ROOT_PASSWORD=root \
 			mysql:5.7
-	fi
-
-	if [ `cwn $MYSQL_CONTAINER_NAME` -eq 0 ]; then
-		docker start $MYSQL_CONTAINER_NAME
 	fi
 
 	docker exec \
@@ -96,12 +88,15 @@ php() {
 		--interactive \
 		--tty \
 		--rm \
-		--publish 8000:8000 \
 		--workdir /app \
 		--volume $PWD:/app \
 		--user $(id -u):$(id -g) \
-		php:7.3-cli-alpine $@
+		--network host \
+		php:7.4-cli-alpine $@
 }
+
+export COMPOSER_HOME="$HOME/.config/composer"
+export COMPOSER_CACHE_DIR="$HOME/.cache/composer"
 
 composer() {
 	docker run \
@@ -114,6 +109,7 @@ composer() {
 		--volume $COMPOSER_HOME:$COMPOSER_HOME \
 		--volume $COMPOSER_CACHE_DIR:$COMPOSER_CACHE_DIR \
 		--user $(id -u):$(id -g) \
+		--network host \
 		composer:latest composer $@
 }
 
