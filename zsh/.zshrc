@@ -108,6 +108,9 @@ export PATH=$HOME/.opt/flutter/bin:$PATH
 export PATH=$HOME/.opt/dart-sdk/bin:$PATH
 export JAVA_HOME=$HOME/.opt/jdk-11.0.5+10
 
+export M2_HOME=$HOME/.opt/apache-maven-3.6.3
+export PATH=$M2_HOME/bin:$PATH
+
 # all containers with name
 acwn() {
 	docker container ls --all --filter name=$1 --quiet | wc -l
