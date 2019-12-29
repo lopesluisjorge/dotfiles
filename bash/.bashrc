@@ -18,9 +18,9 @@ if [ `ls -alh $HOME | grep -i " .opt$" | wc -l` -eq 0 ]; then
 fi
 
 export BASH_ENVIRONMENT_CONFIGS="$HOME/.envconf.sh"
-export BASH_HELPER_CONFIGS="$HOME/.helpers.sh"
 export BASH_DOCKER_CONFIGS="$HOME/.start.sh"
+export BASH_PHP_CONFIGS="$HOME/.php-wrapper.sh"
 
 . $BASH_ENVIRONMENT_CONFIGS
-. $BASH_HELPER_CONFIGS
 . $BASH_DOCKER_CONFIGS
+. $BASH_PHP_CONFIGS

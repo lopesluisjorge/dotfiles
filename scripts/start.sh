@@ -41,7 +41,7 @@ psql() {
 		--interactive \
 		--tty \
 		--workdir /app \
-		$PGSQL_CONTAINER_NAME psql -U postgres -W $argv
+		$PGSQL_CONTAINER_NAME psql -U postgres -W $@
 }
 
 redis-cli() {
@@ -60,7 +60,7 @@ redis-cli() {
 	docker exec \
 		--interactive \
 		--tty \
-		$REDIS_CONTAINER_NAME redis-cli $argv
+		$REDIS_CONTAINER_NAME redis-cli $@
 }
 
 mysql() {
@@ -80,7 +80,7 @@ mysql() {
 		--interactive \
 		--tty \
 		--workdir /app \
-		$MYSQL_CONTAINER_NAME mysql $argv
+		$MYSQL_CONTAINER_NAME mysql $@
 }
 
 php() {
@@ -92,7 +92,7 @@ php() {
 		--volume $PWD:/app \
 		--user $(id -u):$(id -g) \
 		--network host \
-		php:7.4-cli-alpine $argv
+		php:7.4-cli-alpine $@
 }
 
 export COMPOSER_HOME="$HOME/.config/composer"
@@ -110,7 +110,7 @@ composer() {
 		--volume $COMPOSER_CACHE_DIR:$COMPOSER_CACHE_DIR \
 		--user $(id -u):$(id -g) \
 		--network host \
-		composer:latest composer $argv
+		composer:latest composer $@
 }
 
 export PATH
