@@ -4,6 +4,5 @@ composer global require \
 	phpunit/phpunit \
 	psy/psysh \
 	phploc/phploc \
-	squizlabs/php_codesniffer \
 	phpmd/phpmd \
 	phpstan/phpstan

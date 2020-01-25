@@ -9,7 +9,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="agnoster"
+ZSH_THEME="avit"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -69,7 +69,12 @@ HIST_STAMPS="dd/mm/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+    git
+    python
+    dotenv
+    fedora
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -81,11 +86,7 @@ source $ZSH/oh-my-zsh.sh
 export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='vim'
-else
-   export EDITOR='nvim'
-fi
+export EDITOR='nvim'
 
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
@@ -98,18 +99,18 @@ export ARCHFLAGS="-arch x86_64"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
+vim() {
+	nvim $@
+}
 
-if [ `l $HOME | grep -i " .opt$" | wc -l` -eq 0 ]; then
-	mkdir $HOME/.opt
-fi
-
-export PATH=$HOME/.opt/node/bin:$PATH
 export PATH=$HOME/.opt/flutter/bin:$PATH
-export PATH=$HOME/.opt/dart-sdk/bin:$PATH
-export JAVA_HOME=$HOME/.opt/jdk-11.0.5+10
 
-export M2_HOME=$HOME/.opt/apache-maven-3.6.3
-export PATH=$M2_HOME/bin:$PATH
+# export M2_HOME=$HOME/.opt/apache-maven-3.6.3
+# export PATH=$M2_HOME/bin:$PATH
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+. ~/.asdf/plugins/java/set-java-home.sh
 
 # all containers with name
 acwn() {
@@ -121,32 +122,9 @@ cwn() {
 	docker container ls --filter name=$1 --quiet | wc -l
 }
 
-export PGSQL_CONTAINER_NAME=pgsql12_global
-export PGSQL_VOLUME_NAME=pgsql12_global_volume
 export REDIS_CONTAINER_NAME=redis5_global
 export MYSQL_CONTAINER_NAME=mysql57_global
 export MYSQL_VOLUME_NAME=mysql57_global_volume
-
-psql() {
-	if [ `cwn $PGSQL_CONTAINER_NAME` -eq 0 ]; then
-		docker run \
-			--detach \
-			--rm \
-			--name $PGSQL_CONTAINER_NAME \
-			--volume $PWD:/app \
-			--volume $PGSQL_VOLUME_NAME:/var/lib/postgresql/data \
-			--publish 5432:5432 \
-			--env POSTGRES_USER=postgres \
-			--env POSTGRES_PASSWORD=postgres \
-			postgres:12-alpine
-	fi
-
-	docker exec \
-		--interactive \
-		--tty \
-		--workdir /app \
-		$PGSQL_CONTAINER_NAME psql -U postgres -W $argv
-}
 
 redis-cli() {
 	if [ `acwn $REDIS_CONTAINER_NAME` -eq 0 ]; then
@@ -185,34 +163,4 @@ mysql() {
 		--tty \
 		--workdir /app \
 		$MYSQL_CONTAINER_NAME mysql $argv
-}
-
-php() {
-	docker run \
-		--interactive \
-		--tty \
-		--rm \
-		--workdir /app \
-		--volume $PWD:/app \
-		--user $(id -u):$(id -g) \
-		--network host \
-		php:7.4-cli-alpine $argv
-}
-
-export COMPOSER_HOME="$HOME/.config/composer"
-export COMPOSER_CACHE_DIR="$HOME/.cache/composer"
-
-composer() {
-	docker run \
-		--interactive \
-		--tty \
-		--rm \
-		--workdir /app \
-		--volume $PWD:/app \
-		--volume $HOME/.composer:/tmp \
-		--volume $COMPOSER_HOME:$COMPOSER_HOME \
-		--volume $COMPOSER_CACHE_DIR:$COMPOSER_CACHE_DIR \
-		--user $(id -u):$(id -g) \
-		--network host \
-		composer:latest composer $argv
 }
