@@ -27,4 +27,5 @@ fi
 export PATH=$HOME/.composer/vendor/bin:$PATH
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-alias php74="docker container run -it --rm --network host -v $PWD:/app -w /app --user 1000:1000 php:7.4-cli-alpine php"
+alias php74="docker run -it --rm --network host -v $PWD:/app -w /app --user 1000:1000 php:7.4-cli-alpine php $@"
+alias l="ls -alh $@"
