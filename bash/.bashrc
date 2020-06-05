@@ -1,31 +1,27 @@
 # .bashrc
 
-# Source global definitions
+# source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# User specific environment
+# user specific environment
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
+# bash initialization
+. $HOME/.init_my_bash.sh
 
-# User specific aliases and functions
-
+# create opt folder
 if [ `ls -alh $HOME | grep -i " .opt$" | wc -l` -eq 0 ]; then
 	mkdir $HOME/.opt
 fi
 
-# added by travis gem
-[ -f /home/jorge/.travis/travis.sh ] && source /home/jorge/.travis/travis.sh
-
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
-. $HOME/.asdf/plugins/java/set-java-home.sh
 
-export PATH=$HOME/.composer/vendor/bin:$PATH
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+. $HOME/.my_custom_bash.sh
 
-alias php74="docker run -it --rm --network host -v $PWD:/app -w /app --user 1000:1000 php:7.4-cli-alpine php $@"
-alias l="ls -alh $@"
+export PATH=$HOME/.composer/vendor/bin:$PATH # composer
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" # yarn
+
+alias php74="docker run -it --rm  -v $PWD:/app -w /app --user 1000:1000 php:7.4-alpine php $@" # php
