@@ -24,4 +24,23 @@ fi
 export PATH=$HOME/.composer/vendor/bin:$PATH # composer
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" # yarn
 
-alias php74="docker run -it --rm  -v $PWD:/app -w /app --user 1000:1000 php:7.4-alpine php $@" # php
+function php74 {
+	docker run \
+		-it \
+		--rm \
+		--volume $PWD:/app \
+		--workdir /app \
+		--user $(id -u):$(id -g) \
+		php-xdebug php $@
+}
+
+function composer {
+	docker run \
+		-it \
+		--rm \
+		--volume $(pwd):/app \
+		--volume ${COMPOSER_HOME:-$HOME/.composer}:/tmp \
+		--workdir /app \
+		--user $(id -u):$(id -g) \
+		composer:latest $@
+}
