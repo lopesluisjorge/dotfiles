@@ -1,0 +1,23 @@
+# .bashrc
+
+# source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# user specific environment
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+# create opt folder
+if [ `ls -alh $HOME | grep -i " .opt$" | wc -l` -eq 0 ]; then
+	mkdir $HOME/.opt
+fi
+
+# bash initialization
+. $HOME/.dot-init.sh
+
+#
+. $HOME/.dot-custom.sh
+
+#
+. $HOME/.dot-functions.sh

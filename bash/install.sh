@@ -1,5 +1,6 @@
 #!/bin/bash
 
-cp init_my_bash.sh $HOME/.init_my_bash.sh
-cp my_custom_bash.sh $HOME/.my_custom_bash.sh
-cp .bashrc $HOME/.bashrc
+cp dot-init.sh $HOME/.dot-init.sh
+cp dot-custom.sh $HOME/.dot-custom.sh
+cp dot-functions.sh $HOME/.dot-functions.sh
+cp bashrc $HOME/.bashrc
